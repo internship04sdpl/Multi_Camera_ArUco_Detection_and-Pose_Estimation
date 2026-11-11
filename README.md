@@ -1,186 +1,226 @@
-Multi-Camera ArUco Detection and Pose Estimation
+# Multi-Camera ArUco Detection and Pose Estimation
 
-Project Overview
+A Python-based computer vision project for multi-camera calibration, lens distortion correction, ArUco marker detection, and pose estimation using OpenCV.
 
-This project implements a camera-independent multi-camera vision system using OpenCV and ArUco markers.
+The system supports three USB cameras and identifies them dynamically using their hardware Vendor ID (VID) and Product ID (PID), rather than relying on fixed camera indexes.
 
-It supports three different USB cameras and provides camera calibration, lens distortion correction, ArUco marker detection, and 3D pose estimation.
+## Project Overview
 
-The system identifies cameras dynamically using their hardware identifiers (VID/PID), avoiding dependence on fixed camera indexes.
+This project consists of three Python modules:
 
-Supported Cameras
+1. **Camera Intrinsics** – Camera identification, calibration data, intrinsic parameters, and Field of View (FOV).
+2. **Distortion Correction** – Lens distortion correction and live undistorted camera output.
+3. **ArUco Detection** – Marker detection, ID identification, position estimation, and distance measurement.
 
-Camera
+## Supported Cameras
 
-Camera Identifier
+| No. | Camera | Camera Identifier |
+|---|---|---|
+| 1 | Sinoseen USB 2.0 | `sinoseen_usb2` |
+| 2 | Sinoseen USB 3.0 | `sinoseen_usb3` |
+| 3 | OV2710 USB 2.0 | `ov2710_usb2` |
 
-Sinoseen USB 2.0
+## Project Structure
 
-sinoseen_usb2
-
-Sinoseen USB 3.0
-
-sinoseen_usb3
-
-OV2710 USB 2.0
-
-ov2710_usb2
-
-Project Structure
-
-Multi-Camera-ArUco-Detection-and-Pose-Estimation/
+```text
+Multi_Camera_ArUco_Detection_and_Pose_Estimation/
 │
 ├── camera_intrinsics.py
 ├── distortion.py
 ├── aruco.py
 ├── requirements.txt
 └── README.md
+```
 
-Technologies Used
+## Technologies and Libraries
 
-Python
+- Python
+- OpenCV Contrib
+- NumPy
+- ArUco
+- Camera Calibration
+- Computer Vision
+- Pose Estimation
 
-OpenCV Contrib
+## Python Modules
 
-NumPy
+### 1. camera_intrinsics.py
 
-ArUco Marker Detection
+Responsible for camera identification and calibration.
 
-Camera Calibration
+Features:
+- Dynamic camera discovery.
+- Camera identification using VID and PID.
+- Camera intrinsic matrix retrieval.
+- Distortion coefficient retrieval.
+- Camera calibration management.
+- Horizontal, vertical, and diagonal FOV calculation.
 
-Pose Estimation
+### 2. distortion.py
 
-Python Modules
+Responsible for correcting camera lens distortion.
 
-1. camera_intrinsics.py
+Features:
+- Lens distortion correction.
+- Undistortion map generation.
+- Frame remapping.
+- Live distortion correction.
+- Original and corrected image comparison.
 
-Camera identification using VID/PID.
+### 3. aruco.py
 
-Dynamic camera discovery.
+Responsible for ArUco marker detection and pose estimation.
 
-Camera intrinsic parameter retrieval.
+Features:
+- ArUco marker detection.
+- Marker ID identification.
+- Marker boundary visualization.
+- 3D position estimation using OpenCV `solvePnP`.
+- X, Y, and Z-depth measurements.
+- Straight-line distance calculation.
+- Omega angle calculation.
+- Rotation vector (rvec) and translation vector (tvec).
 
-Camera calibration data management.
+## Installation
 
-Field of View (FOV) calculation.
+### 1. Clone the Repository
 
-2. distortion.py
+```bash
+git clone https://github.com/internship04sdpl/Multi_Camera_ArUco_Detection_and_Pose_Estimation.git
+```
 
-Lens distortion correction.
+### 2. Navigate to the Project Directory
 
-Undistortion map generation.
+```bash
+cd Multi_Camera_ArUco_Detection_and_Pose_Estimation
+```
 
-Live camera distortion correction.
+### 3. Install Dependencies
 
-Original and corrected image comparison.
-
-3. aruco.py
-
-ArUco marker detection.
-
-Marker ID identification.
-
-Marker boundary visualization.
-
-3D pose estimation using solvePnP.
-
-Position and distance measurement.
-
-Omega angle calculation.
-
-Installation
-
-Clone the repository:
-
-git clone YOUR_GITHUB_REPOSITORY_URL
-
-Navigate to the project directory:
-
-cd Multi-Camera-ArUco-Detection-and-Pose-Estimation
-
-Install the dependencies:
-
+```bash
 python -m pip install -r requirements.txt
+```
 
-Usage
+## Usage
 
-List Supported Cameras
+### 1. List Supported Cameras
 
-python camera_intrinsics.py list
+```bash
+python aruco.py list
+```
 
-Camera Calibration Information
+### 2. Live Camera Distortion Correction
 
-python camera_intrinsics.py ov2710_usb2 info
+**Sinoseen USB 2.0**
 
-Live Distortion Correction
+```bash
+python distortion.py sinoseen_usb2 live
+```
 
+**Sinoseen USB 3.0**
+
+```bash
+python distortion.py sinoseen_usb3 live
+```
+
+**OV2710 USB 2.0**
+
+```bash
 python distortion.py ov2710_usb2 live
+```
 
-Live ArUco Detection
+### 3. Live ArUco Detection
 
-python aruco.py ov2710_usb2 live
+**Sinoseen USB 2.0**
 
-Other supported cameras:
-
+```bash
 python aruco.py sinoseen_usb2 live
+```
+
+**Sinoseen USB 3.0**
+
+```bash
 python aruco.py sinoseen_usb3 live
+```
 
-Detect All Markers
+**OV2710 USB 2.0**
 
+```bash
+python aruco.py ov2710_usb2 live
+```
+
+Press `Q` to close the live camera window.
+
+### 4. Detect All ArUco Markers
+
+```bash
 python aruco.py ov2710_usb2 all
+```
 
-Individual Measurements
+### 5. Detect a Specific Marker ID
 
-python aruco.py ov2710_usb2 x
-python aruco.py ov2710_usb2 y
-python aruco.py ov2710_usb2 z_depth
-python aruco.py ov2710_usb2 distance
-python aruco.py ov2710_usb2 omega
+```bash
+python aruco.py ov2710_usb2 live --marker-id 4
+```
 
-ArUco Configuration
+## ArUco Configuration
 
-Dictionary: DICT_5X5_50
+| Parameter | Configuration |
+|---|---|
+| Dictionary | `DICT_5X5_50` |
+| Marker Size | 41 mm |
+| Pose Estimation | `cv2.solvePnP()` |
+| Pose Estimation Method | `SOLVEPNP_IPPE_SQUARE` |
+| Detection | Multiple marker IDs |
 
-Marker Size: 41 mm
+## Measurement Outputs
 
-Pose Estimation: OpenCV solvePnP
+The system provides the following measurements:
 
-Coordinate Measurements: X, Y and Z
+| Parameter | Description | Unit |
+|---|---|---|
+| ID | Detected ArUco marker ID | Number |
+| X | Horizontal position relative to camera | mm |
+| Y | Vertical position relative to camera | mm |
+| Z-depth | Depth from camera to marker centre | mm |
+| Distance | Straight-line distance to marker centre | mm |
+| Omega | Marker top-edge angle in the image plane | Degrees |
+| rvec | Rotation vector | — |
+| tvec | Translation vector | — |
 
-Distance: Straight-line distance from the camera to the marker centre
+## Camera Calibration
 
-Omega: Marker top-edge angle in the image plane
+Each supported camera uses its own calibration data.
 
-Measurement Outputs
+The calibration parameters include:
+- Camera intrinsic matrix.
+- Distortion coefficients.
+- Focal lengths.
+- Optical centre coordinates.
+- Field of View (FOV).
 
-The system provides:
+**Note:** Calibration data must be available for the selected camera before running distortion correction or pose estimation.
 
-Marker ID
+## Requirements
 
-X Position (mm)
+Dependencies are listed in `requirements.txt`.
 
-Y Position (mm)
+Install them using:
 
-Z Depth (mm)
+```bash
+python -m pip install -r requirements.txt
+```
 
-Straight-line Distance (mm)
+## Notes
 
-Omega Angle (degrees)
+- Connect the required camera before starting detection.
+- Camera selection is based on the configured camera identity.
+- Use the correct ArUco dictionary and physical marker size.
+- Ensure the marker is visible and properly focused.
+- X, Y, and Z measurements are expressed in millimetres.
+- Omega represents the 2D image-plane angle, not the complete 3D orientation.
 
-Rotation Vector (rvec)
+## Repository
 
-Translation Vector (tvec)
+**GitHub:** https://github.com/internship04sdpl/Multi_Camera_ArUco_Detection_and_Pose_Estimation
 
-Notes
-
-Camera calibration data must be available for the selected camera.
-
-Connect the required camera before running the program.
-
-Use the matching ArUco dictionary and marker size.
-
-Press Q to close live camera windows.
-
-Author
-
-Developed as a multi-camera computer vision project.
